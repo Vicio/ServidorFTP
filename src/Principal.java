@@ -23,6 +23,7 @@ public class Principal
 				lista.add(socket);// se agrega el socket nuevo al arreglo
 				Thread hiloServidor = new HiloServidor(lista, socket);// se genera un hilo para ese socket
 				hiloServidor.start(); //se inicia el hilo
+				hiloServidor.limpiar();
 			}
 		}
 		catch(Exception e)
@@ -30,5 +31,5 @@ public class Principal
 			e.printStackTrace();
 		}
 	}
-	
+
 }

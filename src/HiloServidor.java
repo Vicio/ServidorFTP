@@ -17,14 +17,14 @@ import java.util.StringTokenizer;
 
 public class HiloServidor extends Thread
 {
-	private String directorioServer = "E:\\Servidor\\"; //Direccion estática del servidor
+	private String directorioServer = "E:\\Servidor\\"; //Direccion estï¿½tica del servidor
 	private String directorioUsuario = ""; //Directorio del usuario
 	private String directorioActual = ""; //El directorio en el que se encuentra
 	private String directorioLocal = ""; //El directorio de la computadora cliente
 	private String usuario = ""; //El nombre del usuario
-	private String password = ""; //La contraseña
+	private String password = ""; //La contraseï¿½a
 	private Socket socket; //El socket
-	private ArrayList<Socket> lista; //El arreglo de sockets para soporte de múltiples usuarios
+	private ArrayList<Socket> lista; //El arreglo de sockets para soporte de mï¿½ltiples usuarios
 	private DataInputStream entradaCliente; // La entrada de mensajes
 	
 	public HiloServidor(ArrayList<Socket> lista, Socket socket)
@@ -47,9 +47,9 @@ public class HiloServidor extends Thread
 	@Override
 	public void run() 
 	{
-		//la sintaxis de mensajes será comando-^-param 1,param 2...param n - 1,param n
-		//el primer mensaje será #password@usuario
-		//el mensaje para crear será ^CREATE-^-password@usuario
+		//la sintaxis de mensajes serï¿½ comando-^-param 1,param 2...param n - 1,param n
+		//el primer mensaje serï¿½ #password@usuario
+		//el mensaje para crear serï¿½ ^CREATE-^-password@usuario
 		for(;;)
 		{
 			String mensajeEntrada = MESSAGEIN();//se recibe algun mensaje
@@ -104,20 +104,20 @@ public class HiloServidor extends Thread
 							directorioUsuario + usuario + ".pass"
 						)
 					);
-					//Se lee la contraseña del archivo
+					//Se lee la contraseï¿½a del archivo
 					String pass = buferLectura.readLine();
 					buferLectura.close();// Se cierra el archivo
-					//se comparan la contraseña del archivo con la escrita por el uusario
+					//se comparan la contraseï¿½a del archivo con la escrita por el uusario
 					if(pass.equals(password))
 					{
-						//Si es correcta la contraseña se carga como directorio actual el directorio del usuario
+						//Si es correcta la contraseï¿½a se carga como directorio actual el directorio del usuario
 						directorioActual = directorioUsuario;
-						//se llama el método LS
+						//se llama el mï¿½todo LS
 						LS();
 					}
 					else
 					{
-						//Se envia un mensaje de contraseña incorrecta
+						//Se envia un mensaje de contraseï¿½a incorrecta
 						MESSAGEOUT("#BADPASS");
 					}
 					
@@ -145,7 +145,7 @@ public class HiloServidor extends Thread
 				}
 				if(comando.equals("PUT"))
 				{
-					//se separan los parametros para ser procesados en el método
+					//se separan los parametros para ser procesados en el mï¿½todo
 					StringTokenizer ST2 = new StringTokenizer(ST.nextToken(), ",");
 					int limite = ST2.countTokens();
 					String[] parametros = new String[limite];
@@ -157,7 +157,7 @@ public class HiloServidor extends Thread
 				}
 				if(comando.equals("LCD"))
 				{
-					//se separan los parametros para ser procesados en el método
+					//se separan los parametros para ser procesados en el mï¿½todo
 					StringTokenizer ST2 = new StringTokenizer(ST.nextToken(), ",");
 					int limite = ST2.countTokens();
 					String[] parametros = new String[limite];
@@ -177,7 +177,7 @@ public class HiloServidor extends Thread
 				}
 				if(comando.equals("DELETE"))
 				{
-					//se separan los parametros para ser procesados en el método
+					//se separan los parametros para ser procesados en el mï¿½todo
 					StringTokenizer ST2 = new StringTokenizer(ST.nextToken(), ",");
 					int limite = ST2.countTokens();
 					String[] parametros = new String[limite];
@@ -189,7 +189,7 @@ public class HiloServidor extends Thread
 				}
 				if(comando.equals("MPUT"))
 				{
-					//se separan los parametros para ser procesados en el método
+					//se separan los parametros para ser procesados en el mï¿½todo
 					StringTokenizer ST2 = new StringTokenizer(ST.nextToken(), ",");
 					int limite = ST2.countTokens();
 					String[] parametros = new String[limite];
@@ -201,7 +201,7 @@ public class HiloServidor extends Thread
 				}
 				if(comando.equals("MGET"))
 				{
-					//se separan los parametros para ser procesados en el método
+					//se separan los parametros para ser procesados en el mï¿½todo
 					StringTokenizer ST2 = new StringTokenizer(ST.nextToken(), ",");
 					int limite = ST2.countTokens();
 					String[] parametros = new String[limite];
@@ -226,10 +226,10 @@ public class HiloServidor extends Thread
 			}
 		}
 	}
-	//Método para crear un usuario nuevo y su directorio
+	//Mï¿½todo para crear un usuario nuevo y su directorio
 	private void CREATE(String[] params)
 	{
-		//se obtienen el usuario y la contraseña de los parámetros
+		//se obtienen el usuario y la contraseï¿½a de los parï¿½metros
 		String pass = params[0];
 		String usu = params[1];
 		try
@@ -237,20 +237,20 @@ public class HiloServidor extends Thread
 			//Se crea un archivo nuevo y se genera como directorio con el nombre del usuario
 			File dir = new File(directorioServer + usu);
 			dir.mkdir();
-			//Se asignan los directorios de usuario y el actual para la navegación 
+			//Se asignan los directorios de usuario y el actual para la navegaciï¿½n 
 			directorioUsuario = directorioServer + usu + "\\";
 			directorioActual = directorioUsuario;
-			//Se crea el archivo donde se guardará la contraseña
+			//Se crea el archivo donde se guardarï¿½ la contraseï¿½a
 			File archivoPass = new File(directorioUsuario + usu + ".pass");
 			archivoPass.createNewFile();
-			//Se abre el archivo y se escribie la contraseña
+			//Se abre el archivo y se escribie la contraseï¿½a
 			BufferedWriter escArchivo = new BufferedWriter
 			(
 				new FileWriter(archivoPass)
 			);
 			escArchivo.write(pass);
 			escArchivo.close();
-			//Se envía un mensaje de nuevo usuario creado al cliente
+			//Se envï¿½a un mensaje de nuevo usuario creado al cliente
 			MESSAGEOUT("^NEWUSERCREATED");
 			System.out.println("Nuevo usuario creado: " + usu);
 			//Se llama el metodo para cargar los directorios
@@ -261,7 +261,7 @@ public class HiloServidor extends Thread
 			e.printStackTrace();
 		}
 	}
-	//Método para recibir mensajes
+	//Mï¿½todo para recibir mensajes
 	private String MESSAGEIN()
 	{
 		String mensaje = "";
@@ -278,12 +278,12 @@ public class HiloServidor extends Thread
 		
 		return mensaje;
 	}
-	//Método para enviar mensajes
+	//Mï¿½todo para enviar mensajes
 	private void MESSAGEOUT(String mensaje)
 	{
 		try
 		{
-			//se asigna una salida por el socket y se envía el mensaje
+			//se asigna una salida por el socket y se envï¿½a el mensaje
 			DataOutputStream salida = new DataOutputStream(socket.getOutputStream());
 			salida.writeUTF(mensaje);
 		}
@@ -292,12 +292,12 @@ public class HiloServidor extends Thread
 			System.err.println("Error mensajeSalida: " + ioe.toString());
 		}		
 	}
-	//Método para cerrar la sesión
+	//Mï¿½todo para cerrar la sesiï¿½n
 	private void CLOSE()
 	{
 		try
 		{
-			//Se envía un mensaje de cierre de sesión al cliente
+			//Se envï¿½a un mensaje de cierre de sesiï¿½n al cliente
 			MESSAGEOUT("^SESSIONEND");
 			//se cierra el socket
 			socket.close();
@@ -311,7 +311,7 @@ public class HiloServidor extends Thread
 			System.out.println("Error al cerrar sesion del usuario: " + usuario);
 		}
 	}
-	//Método para descargar un archivo del servidor
+	//Mï¿½todo para descargar un archivo del servidor
 	private void GET(String param)
 	{
 		try
@@ -325,12 +325,12 @@ public class HiloServidor extends Thread
 			//se crea el lector del archivo
 			InputStream entrada = new FileInputStream(archivo);
 			OutputStream salida = socket.getOutputStream();
-			//se genera un bufer con tamaño de 4k
+			//se genera un bufer con tamaï¿½o de 4k
 			byte[] bufer = new byte[4096];
 			//se envia un mensaje para que el cliente se prepare para recibir el archivo
 			MESSAGEOUT("GET-^-" + nombreArchivo + "," + archivo.length());
 			System.out.println("Servidor listo para enviar archivo al usuario: " + usuario);
-			//se envían las partes del archivo mientras hasta que se llega al final del archivo
+			//se envï¿½an las partes del archivo mientras hasta que se llega al final del archivo
 			while((cantBytes = entrada.read(bufer)) != -1)
 			{
 				if(cantBytes > 0)
@@ -347,42 +347,42 @@ public class HiloServidor extends Thread
 			System.out.println("Paquete perdido para el usuario: " + usuario);
 		}
 	}
-	//Método para subir archivos al servidor
+	//Mï¿½todo para subir archivos al servidor
 	private void PUT(String[] params)
 	{
 		try
 		{
 			//se obtiene el nombre del archivo
 			String nombreArchivo = params[0];
-			//Se obtiene el tamaño del archivo local
+			//Se obtiene el tamaï¿½o del archivo local
 			long longArchivoLocal = Long.parseLong(params[1]);
-			//se genera una variable para el tamaño del archivo remoto
+			//se genera una variable para el tamaï¿½o del archivo remoto
 			long longArchivoRemoto = 0;
 			//se crea una variable para determinar la cantidad de bytes enviados
 			int cantBytes = 0;
-			//se genera un bufer con tamaño de 4k
+			//se genera un bufer con tamaï¿½o de 4k
 			byte[] bufer = new byte[4096];
 			//se crea un nuevo archivo
 			File archivo = new File(directorioActual + nombreArchivo);
 			archivo.createNewFile();
 			//Se genera el stream para guardar el archivo
 			OutputStream salida = new FileOutputStream(archivo);
-			//se envía mensaje de que el servidor está listo para recibir el archivo
+			//se envï¿½a mensaje de que el servidor estï¿½ listo para recibir el archivo
 			MESSAGEOUT("^PUTREADY");
 			System.out.println("Servidor listo para recibir archivo del usuario: " + usuario);
-			//se genera la entrada de bytes a través del socket
+			//se genera la entrada de bytes a travï¿½s del socket
 			InputStream entrada = socket.getInputStream();
-			//el ciclo continua mientras hasta que el tamaño enviado como parámetro coincida con el del archivo del servidor
+			//el ciclo continua mientras hasta que el tamaï¿½o enviado como parï¿½metro coincida con el del archivo del servidor
 			while(longArchivoLocal > longArchivoRemoto)
 			{
 				//se obtiene la cantidad de bytes
 				cantBytes = entrada.read(bufer);
-				//se suman los bytes acumulados en el envío
+				//se suman los bytes acumulados en el envï¿½o
 				longArchivoRemoto += cantBytes;
 				if(cantBytes < 0)
 				{
 					MESSAGEOUT("^EOF");
-					System.out.println("Se llegó al fin del archivo para el usuario: " + usuario);
+					System.out.println("Se llegï¿½ al fin del archivo para el usuario: " + usuario);
 				}
 				if(cantBytes > 0)
 					salida.write(bufer, 0, cantBytes); //Se escriben los bytes en el archivo del servidor
@@ -391,7 +391,7 @@ public class HiloServidor extends Thread
 			salida.close();
 			//se envia mensaje de descarga finalizada
 			MESSAGEOUT("^DONEUPLOAD");
-			//se llaman el método para mostrar los archivos y directorios del servidor
+			//se llaman el mï¿½todo para mostrar los archivos y directorios del servidor
 			LS();
 			System.out.println("Archivo subido correctamente para el usuario: " + usuario);
 		}
@@ -402,7 +402,7 @@ public class HiloServidor extends Thread
 			System.out.println("Paquete perdido para el usuario: " + usuario);
 		}		
 	}
-	//Método para que el servidor sepa el directorio del cliente
+	//Mï¿½todo para que el servidor sepa el directorio del cliente
 	private void LCD(String[] params)
 	{
 		try
@@ -415,7 +415,7 @@ public class HiloServidor extends Thread
 				//se separa el directorio
 				String[] dir = directorioLocal.split("\\");
 				String newdir = "";
-				//se vuelve a unir omitiendo el último
+				//se vuelve a unir omitiendo el ï¿½ltimo
 				for(int i = 0; i < directorioLocal.length() - 1; i++)
 					newdir += dir[i] + "\\";
 				directorioLocal = newdir;
@@ -436,7 +436,7 @@ public class HiloServidor extends Thread
 		}
 		
 	}
-	//Método para la navegación del directorio del servidor
+	//Mï¿½todo para la navegaciï¿½n del directorio del servidor
 	private void CD(String dir)
 	{
 		try
@@ -452,14 +452,14 @@ public class HiloServidor extends Thread
 					StringTokenizer STDir = new StringTokenizer(directorioActual, "\\");
 					int limite = STDir.countTokens();
 					directorioActual = "";
-					//se vuelve a unir omitiendo el último
+					//se vuelve a unir omitiendo el ï¿½ltimo
 					for(int i = 0; i < limite - 1; i++)
 					{
 						directorioActual += STDir.nextToken() + "\\";
 					}
 					
 					LS();
-					System.out.println("El usuario " + usuario + " se movió a " + directorioActual);					
+					System.out.println("El usuario " + usuario + " se moviï¿½ a " + directorioActual);					
 				}
 			}
 			else
@@ -467,12 +467,12 @@ public class HiloServidor extends Thread
 				//Se crea un nuevo archivo
 				File temp = new File(directorioActual + dir);
 				//si resulta ser un directorio se cambia el directorio actual a este nuevo directorio
-				// y se envía la nueva lista de archivos al cliente
+				// y se envï¿½a la nueva lista de archivos al cliente
 				if(temp.isDirectory())
 				{
 					directorioActual += dir + "\\";
 					LS();
-					System.out.println("El usuario " + usuario + " se movió a " + directorioActual);					
+					System.out.println("El usuario " + usuario + " se moviï¿½ a " + directorioActual);					
 				}
 			}			
 		}
@@ -480,10 +480,10 @@ public class HiloServidor extends Thread
 		{
 			e.printStackTrace();
 			MESSAGEOUT("#NODIR");
-			System.out.println("El usuario " + usuario + " se movió a un directorio inexistente.");
+			System.out.println("El usuario " + usuario + " se moviï¿½ a un directorio inexistente.");
 		}
 	}
-	//Método para enviar el listado de archivos dentro de la carpeta actual a el cliente
+	//Mï¿½todo para enviar el listado de archivos dentro de la carpeta actual a el cliente
 	private void LS()
 	{
 		try
@@ -494,9 +494,9 @@ public class HiloServidor extends Thread
 			String path = dir.getAbsolutePath();
 			//se obtiene el listado de archivos y carpetas
 			String[] dirs = dir.list();
-			//se envía un mensaje para decirle al cliente que limpie su listado actual
+			//se envï¿½a un mensaje para decirle al cliente que limpie su listado actual
 			MESSAGEOUT("^CLEARLIST");
-			//se envían los nombres de los archivos y directorios
+			//se envï¿½an los nombres de los archivos y directorios
 			//con el formato tipoArchivo:nombre donde tipoArchivo = DIR/FILE
 			for(int i = 0; i < dirs.length; i++)
 			{
@@ -515,7 +515,7 @@ public class HiloServidor extends Thread
 			System.out.println("Error al solicitar la lista para el usuario: " + usuario);
 		}
 	}
-	//Método para borrar un archivo del servidor
+	//Mï¿½todo para borrar un archivo del servidor
 	private void DELETE(String[] params)
 	{
 		try
@@ -549,13 +549,13 @@ public class HiloServidor extends Thread
 	{
 		
 	}
-	//Método para crear un directorio en el servidor
+	//Mï¿½todo para crear un directorio en el servidor
 	private void MKDIR(String param)
 	{
 		String dir = param;
 		try
 		{
-			//se crea un archivo con el nombre enviado como parámetro
+			//se crea un archivo con el nombre enviado como parï¿½metro
 			File carpeta = new File(directorioActual + dir);
 			//se genera como carpeta
 			carpeta.mkdir();
@@ -571,7 +571,7 @@ public class HiloServidor extends Thread
 			System.out.println("Error al crear el directorio para el usuario: " + usuario);
 		}
 	}
-	//Método para remover un directorio del servidor
+	//Mï¿½todo para remover un directorio del servidor
 	private void RMDIR(String param)
 	{
 		String dir = param;
@@ -592,7 +592,7 @@ public class HiloServidor extends Thread
 			MESSAGEOUT("#NOTEMPTY");
 		}
 	}
-	//Método para enviar el directorio actual en el que se encuentra el servidor
+	//Mï¿½todo para enviar el directorio actual en el que se encuentra el servidor
 	private void PWD()
 	{
 		//
@@ -602,4 +602,10 @@ public class HiloServidor extends Thread
 			ldir += dir[i] + "\\";
 		MESSAGEOUT("LOCATION-^-" + ldir);
 	}
+
+	public void limpiar()
+	{
+		System.out.println("");
+	}
+	
 }
